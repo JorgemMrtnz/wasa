@@ -1,30 +1,26 @@
 import tkinter as tk
-from tkinter import messagebox
-import sympy
-import numpy as np
-import matplotlib.pyplot as plt
+from tkinter import messagebox #en caso de querer usar mensajes emergentes
+import sympy#libreria matematica simbolica(le sabe a derivadas y integrales)
+import numpy as np#esta maneja los arreglos y funciones matematicas numericas (numeros)
+import matplotlib.pyplot as plt #Hace los graficos epicos
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk 
-# ### ARRIBA: Importamos NavigationToolbar2Tk
+# esta cosa rara es para meter los graficos de matplotlib dentro de tkinter es decir en vez de abrir otro archivo se ve todo en la misma ventana
 
-class SuperCalculadoraMatematica:
+class CalculadoraDerivadasIntegrales:
     def __init__(self, root):
-        self.root = root
-        self.root.title("Entorno Matemático Unificado (Pro)")
-        self.root.geometry("1200x700") 
+        self.root = root # root es la ventana principal
+        self.root.title("Calculadora de Derivadas e Integrales")
+        self.root.geometry("1200x700") # tamaño inicial
         self.root.config(bg="#ECF0F1")
 
-        # =================================================
         # DISPOSICIÓN PRINCIPAL
-        # =================================================
         frame_izq = tk.Frame(root, bg="#2C3E50", width=350)
         frame_izq.pack(side=tk.LEFT, fill=tk.Y)
         
         frame_der = tk.Frame(root, bg="white")
         frame_der.pack(side=tk.RIGHT, fill=tk.BOTH, expand=True)
 
-        # =================================================
         # PANEL IZQUIERDO (Igual que antes)
-        # =================================================
         tk.Label(frame_izq, text="Panel de Control", bg="#2C3E50", fg="white", 
                  font=("Helvetica", 16, "bold")).pack(pady=15)
 
@@ -210,5 +206,5 @@ class SuperCalculadoraMatematica:
 
 if __name__ == "__main__":
     ventana = tk.Tk()
-    app = SuperCalculadoraMatematica(ventana)
+    app = CalculadoraDerivadasIntegrales(ventana)
     ventana.mainloop()
