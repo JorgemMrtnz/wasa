@@ -42,7 +42,7 @@ class CalculadoraDerivadasIntegrales:
         tk.Frame(frame_izq, height=2, bg="#7F8C8D").pack(fill=tk.X, pady=20, padx=10)
 
         # Configuración Gráfica
-        tk.Label(frame_izq, text="Configuración Gráfica", bg="#2C3E50", fg="white", font=("Helvetica", 14, "bold")).pack(pady=5)
+        tk.Label(frame_izq, text="función con su área", bg="#2C3E50", fg="white", font=("Helvetica", 14, "bold")).pack(pady=5)
 
         # Área
         lbl_area = tk.Label(frame_izq, text=" Área (Límites X)", bg="#2C3E50", fg="#BB8FCE", font=("bold", 10))
@@ -66,22 +66,22 @@ class CalculadoraDerivadasIntegrales:
         self.entry_x0.insert(0, "2")
 
         # BOTÓN ACTUALIZAR
-        tk.Button(frame_izq, text="🔄 GRAFICAR / REINICIAR VISTA", command=self.actualizar_todo, 
+        tk.Button(frame_izq, text="📈 GRAFICAR o REINICIAR VISTA 🔄", command=self.actualizar_todo, 
                   bg="#27AE60", fg="white", font=("Arial", 12, "bold"), height=2).pack(pady=30, padx=20, fill=tk.X)
 
         # =================================================
         # PANEL DERECHO (MATPLOTLIB CON TOOLBAR)
         # =================================================
-        self.fig = plt.Figure(figsize=(5, 5), dpi=100)
-        self.ax = self.fig.add_subplot(111)
+        self.fig = plt.Figure(figsize=(5, 5), dpi=100)# creamos el lienzo de matplotlib figsize es el tamaño u dpi la resolucion
+        self.ax = self.fig.add_subplot(111) # añadimos un subplot (un grafico) donde el x es el numero de filas, el segundo el numero de columnas y el tercero la posicion
         
         # 1. El Canvas (El dibujo)
-        self.canvas = FigureCanvasTkAgg(self.fig, master=frame_der)
-        self.canvas.get_tk_widget().pack(fill=tk.BOTH, expand=True)
+        self.canvas = FigureCanvasTkAgg(self.fig, master=frame_der) #Creamos un objeto canvas que contiene la figura matplotlib y lo metemos en el frame derecho
+        self.canvas.get_tk_widget().pack(fill=tk.BOTH, expand=True) # Empaquetamos el widget del canvas para que ocupe todo el frame derecho
 
-        # 2. ### LA BARRA DE HERRAMIENTAS MÁGICA ###
+        # 2. ### LA BARRA DE HERRAMIENTAS ###
         # Esto añade los botones de Zoom, Pan, Guardar, etc.
-        toolbar = NavigationToolbar2Tk(self.canvas, frame_der)
+        toolbar = NavigationToolbar2Tk(self.canvas, frame_der) # Hace las barras de herramientas
         toolbar.update()
         self.canvas.get_tk_widget().pack(fill=tk.BOTH, expand=True)
 
@@ -92,7 +92,7 @@ class CalculadoraDerivadasIntegrales:
         texto = texto.lower()
         reemplazos = {"sen": "sin", "arcsin": "asin", "arccos": "acos", "arctan": "atan", "^": "**"}
         for viejo, nuevo in reemplazos.items(): texto = texto.replace(viejo, nuevo)
-        return texto
+        return texto #el for recorre el diccionario reemplazos y va cambiando las cosas viejas por las nuevas texto.replace busca en el texto las cosas viejas y las cambia por las nuevas si hay
 
     def formatear_salida(self, texto):
         reemplazos = {"**": "^", "*": "·", "asin": "arcsin", "acos": "arccos", "atan": "arctan", "log": "ln", "exp": "e^", "sqrt": "√"}
@@ -100,36 +100,36 @@ class CalculadoraDerivadasIntegrales:
         return texto
 
     def obtener_expresion(self):
-        txt = self.normalizar_entrada(self.entrada_func.get())
-        locales = {"e": sympy.E, "pi": sympy.pi, "ln": sympy.log, "log": lambda x: sympy.log(x, 10)}
-        try: return sympy.sympify(txt, locals=locales)
+        txt = self.normalizar_entrada(self.entrada_func.get())#normalizar permite el cambio de reescritura y entrar_func es la entrada de la funcion
+        locales = {"e": sympy.E, "pi": sympy.pi, "ln": sympy.log, "log": lambda x: sympy.log(x, 10)}# otro diccionario este pa que nos meta los numeros e y pi y los logaritmos
+        try: return sympy.sympify(txt, locals=locales)#este  convierte el texto en una expresion matematica y si no puede lo devuelve como none
         except: return None
 
     def mostrar_derivada(self):
-        expr = self.obtener_expresion()
-        if expr: self.escribir_res(self.formatear_salida(str(sympy.diff(expr, sympy.symbols('x')))))
+        expr = self.obtener_expresion() #obtener_expresion convierte el texto en una expresion matematica
+        if expr: self.escribir_res(self.formatear_salida(str(sympy.diff(expr, sympy.symbols('x'))))) #define la x
 
     def mostrar_integral(self):
         expr = self.obtener_expresion()
         if expr: self.escribir_res(self.formatear_salida(str(sympy.integrate(expr, sympy.symbols('x')))) + " + C")
 
     def escribir_res(self, texto):
-        self.salida_res.config(state='normal')
-        self.salida_res.delete(0, tk.END); self.salida_res.insert(0, texto)
-        self.salida_res.config(state='readonly')
+        self.salida_res.config(state='normal')# permitir escribir en la caja de resultado
+        self.salida_res.delete(0, tk.END); self.salida_res.insert(0, texto)#borrar lo que haya y poner el resultado
+        self.salida_res.config(state='readonly')# hacer la caja de resultado de solo lectura
 
     # =================================================
     # LÓGICA GRÁFICA MEJORADA
     # =================================================
-    def actualizar_todo(self):
-        expr = self.obtener_expresion()
-        if not expr: return
+    def actualizar_todo(self): 
+        expr = self.obtener_expresion()# nos dan la formula
+        if not expr: return 
 
-        x_sym = sympy.symbols('x')
-        try: f_num = sympy.lambdify(x_sym, expr, modules=['numpy'])
+        x_sym = sympy.symbols('x') # definimos la variable simbolica x
+        try: f_num = sympy.lambdify(x_sym, expr, modules=['numpy'])#esto convierte la expresion simbolica en una funcion numerica que puede evaluar arrays de numpy
         except: return
 
-        self.ax.clear()
+        self.ax.clear()# borramos la grafica anterior
 
         # --- MEJORA 1: DETECCIÓN INTELIGENTE DE LÍMITES ---
         try:
@@ -141,22 +141,19 @@ class CalculadoraDerivadasIntegrales:
             if x_min >= x_max: x_max = x_min + 10
         except:
             x_min, x_max = -10, 10
-
-        # --- MEJORA 2: RESOLUCIÓN DINÁMICA ---
-        # Si el rango es grande (ej: 0 a 1000), necesitamos más puntos.
-        # Calculamos puntos basándonos en la distancia. Mínimo 1000 puntos.
-        distancia = abs(x_max - x_min)
-        num_puntos = int(max(1000, distancia * 50)) 
+        # --- MEJORA 2: MÁS PUNTOS EN LA GRÁFICA PARA ZOOMS CERCANOS ---
+        distancia = abs(x_max - x_min)# calcula la distancia entre x max y x min
+        num_puntos = int(max(1000, distancia * 50)) # cuantos mas puntos mas detallada la grafica
         
-        x_vals = np.linspace(x_min, x_max, num_puntos)
+        x_vals = np.linspace(x_min, x_max, num_puntos)# genera num_puntos entre x_min y x_max
         
         try:
-            y_vals = f_num(x_vals)
+            y_vals = f_num(x_vals) # evalua la funcion en todos esos puntos de y
             if not isinstance(y_vals, np.ndarray): y_vals = np.full_like(x_vals, y_vals)
         except: return
 
         # Dibujar función
-        self.ax.plot(x_vals, y_vals, color='#2980B9', linewidth=2, label='f(x)')
+        self.ax.plot(x_vals, y_vals, color='#2980B9', linewidth=2, label='f(x)')# grafica la funcion con color azul y ancho de linea 2
 
         # Área (Solo dibujamos si tiene sentido)
         mask = (x_vals >= x_min) & (x_vals <= x_max)
