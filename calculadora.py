@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import messagebox #en caso de querer usar mensajes emergentes
-import sympy#libreria matematica simbolica(le sabe a derivadas y integrales)
-import numpy as np#esta maneja los arreglos y funciones matematicas numericas (numeros)
+import sympy #libreria matematica simbolica(le sabe a derivadas y integrales)
+import numpy as np #esta maneja los arreglos y funciones matematicas numericas (numeros)
 import matplotlib.pyplot as plt #Hace los graficos epicos
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk 
 # esta cosa rara es para meter los graficos de matplotlib dentro de tkinter es decir en vez de abrir otro archivo se ve todo en la misma ventana
@@ -15,25 +15,25 @@ class CalculadoraDerivadasIntegrales:
 
         # DISPOSICIÓN PRINCIPAL
         frame_izq = tk.Frame(root, bg="#2C3E50", width=350)
-        frame_izq.pack(side=tk.LEFT, fill=tk.Y)
+        frame_izq.pack(side=tk.LEFT, fill=tk.Y) #la cosa de la izquierda azul oscuro diseño
         
         frame_der = tk.Frame(root, bg="white")
-        frame_der.pack(side=tk.RIGHT, fill=tk.BOTH, expand=True)
+        frame_der.pack(side=tk.RIGHT, fill=tk.BOTH, expand=True)#otra pero esta de color blanco el expand true sirve para que ocupe todo el espacio disponible si expando la ventana
 
         # PANEL IZQUIERDO (Igual que antes)
-        tk.Label(frame_izq, text="Panel de Control", bg="#2C3E50", fg="white", 
-                 font=("Helvetica", 16, "bold")).pack(pady=15)
+        tk.Label(frame_izq, text="Calculadora de derivadas e integrales", bg="#2C3E50", fg="white", 
+                 font=("Helvetica", 16, "bold")).pack(pady=15) #el titulo y pady es centrar el texto
 
-        tk.Label(frame_izq, text="Función f(x):", bg="#2C3E50", fg="#BDC3C7").pack(anchor="w", padx=20)
-        self.entrada_func = tk.Entry(frame_izq, font=("Arial", 14), justify='center')
+        tk.Label(frame_izq, text="Función f(x):", bg="#2C3E50", fg="#BDC3C7").pack(anchor="w", padx=10)
+        self.entrada_func = tk.Entry(frame_izq, font=("Arial", 14), justify='center')#entrada de la funcion y justfy que vaya al centro
         self.entrada_func.pack(pady=5, padx=20, fill=tk.X)
-        self.entrada_func.insert(0, "x**3 - 10*x") 
+        self.entrada_func.insert(0, "x**3 - 10*x") #funcion por defecto una que se añade como demostracion
 
         # Botones Texto
         frame_btns = tk.Frame(frame_izq, bg="#2C3E50")
         frame_btns.pack(pady=10)
-        tk.Button(frame_btns, text="Derivada (Texto)", command=self.mostrar_derivada, bg="#E74C3C", fg="white").grid(row=0, column=0, padx=5)
-        tk.Button(frame_btns, text="Integral (Texto)", command=self.mostrar_integral, bg="#3498DB", fg="white").grid(row=0, column=1, padx=5)
+        tk.Button(frame_btns, text="Derivada", command=self.mostrar_derivada, bg="#E74C3C", fg="white").grid(row=0, column=0, padx=5)
+        tk.Button(frame_btns, text="Integral", command=self.mostrar_integral, bg="#3498DB", fg="white").grid(row=0, column=1, padx=5)#comand=self.mostrar_integral llama a la funcion integral
 
         tk.Label(frame_izq, text="Resultado:", bg="#2C3E50", fg="#BDC3C7").pack(anchor="w", padx=20, pady=(10,0))
         self.salida_res = tk.Entry(frame_izq, font=("Arial", 11, "bold"), justify='center', readonlybackground="#95a5a6")
@@ -45,7 +45,7 @@ class CalculadoraDerivadasIntegrales:
         tk.Label(frame_izq, text="Configuración Gráfica", bg="#2C3E50", fg="white", font=("Helvetica", 14, "bold")).pack(pady=5)
 
         # Área
-        lbl_area = tk.Label(frame_izq, text="🟣 Área (Límites X)", bg="#2C3E50", fg="#BB8FCE", font=("bold", 10))
+        lbl_area = tk.Label(frame_izq, text=" Área (Límites X)", bg="#2C3E50", fg="#BB8FCE", font=("bold", 10))
         lbl_area.pack(pady=(10, 5))
         frame_limites = tk.Frame(frame_izq, bg="#2C3E50")
         frame_limites.pack()
